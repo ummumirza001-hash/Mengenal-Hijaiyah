@@ -24,7 +24,7 @@
       tinCanPresent: false,
       cmi5Present: false,
       aoSupport: false,
-      scale: 'noscale',
+      scale: 'show all',
       captureRc: false,
       browserSize: 'optimal',
       bgColor: '#FFFFFF',
@@ -418,6 +418,30 @@
   
 
   <link rel="stylesheet" href="html5/data/css/output.min.css" data-noprefix/>
+
+  <!-- Tombol layar penuh -->
+  <style>
+    #fs-btn{position:fixed;right:10px;bottom:10px;z-index:99999;width:44px;height:44px;border:0;border-radius:50%;
+      background:rgba(0,0,0,.55);color:#fff;font-size:22px;line-height:44px;cursor:pointer;padding:0}
+    #fs-btn:hover{background:rgba(0,0,0,.75)}
+    @media (pointer:coarse){ #fs-btn{right:auto;left:8px;bottom:8px;width:36px;height:36px;line-height:36px;font-size:18px;opacity:.7} }
+  </style>
+  <button id="fs-btn" type="button" title="Layar penuh" aria-label="Layar penuh">&#x26F6;</button>
+  <script>
+    (function(){
+      var d=document, el=d.documentElement, b=d.getElementById('fs-btn');
+      var req=el.requestFullscreen||el.webkitRequestFullscreen||el.msRequestFullscreen;
+      if(!req){ b.style.display='none'; return; }
+      function isFs(){ return d.fullscreenElement||d.webkitFullscreenElement||d.msFullscreenElement; }
+      function upd(){ b.innerHTML=isFs()?'&#x2715;':'&#x26F6;'; b.title=isFs()?'Keluar layar penuh':'Layar penuh'; }
+      b.addEventListener('click',function(){
+        if(isFs()){ (d.exitFullscreen||d.webkitExitFullscreen||d.msExitFullscreen).call(d); return; }
+        var p=req.call(el);
+        if(p&&p.then){ p.then(function(){ try{ screen.orientation.lock('landscape').catch(function(){}); }catch(e){} }).catch(function(){}); }
+      });
+      d.addEventListener('fullscreenchange',upd); d.addEventListener('webkitfullscreenchange',upd);
+    })();
+  </script>
 </body>
 <script src="html5/lib/scripts/bootstrapper.min.js"></script>
 </html>
